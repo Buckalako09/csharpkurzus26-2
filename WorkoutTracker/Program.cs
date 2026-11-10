@@ -130,3 +130,76 @@ Console.WriteLine($"Törlés sikeres: {planDeleted}");
 
 Console.WriteLine(
     $"Megmaradt edzéstervek száma: {workoutPlans.Count}");
+
+
+
+Console.WriteLine();
+Console.WriteLine("=== Edzések teljesítésének tesztje ===");
+
+// Új edzésterv létrehozása
+WorkoutPlan completedPlan =
+    workoutService.CreateWorkoutPlan("Láb nap 2");
+
+// A korábban létrehozott guggolás hozzárendelése
+workoutService.AddExerciseToWorkoutPlan(
+    completedPlan.Id,
+    squat.Id);
+
+// Edzéstervek listázása
+Console.WriteLine();
+Console.WriteLine("Edzéstervek:");
+
+foreach (WorkoutPlan plan in workoutService.GetAllWorkoutPlans())
+{
+    Console.WriteLine($"- {plan.Name}");
+}
+
+// Gyakorlatok lekérdezése
+Console.WriteLine();
+Console.WriteLine("Láb nap 2 gyakorlatok:");
+
+List<Exercise> planExercises =
+    workoutService.GetExercisesForWorkoutPlan(
+        completedPlan.Id);
+
+foreach (Exercise exercise in planExercises)
+{
+    Console.WriteLine($"- {exercise.Name}");
+}
+
+// Az edzésterv teljesítése kétszer
+Console.WriteLine();
+Console.WriteLine("Edzések teljesítése...");
+
+WorkoutSession firstSession =
+    workoutService.CompleteWorkout(completedPlan.Id);
+
+WorkoutSession secondSession =
+    workoutService.CompleteWorkout(completedPlan.Id);
+
+Console.WriteLine(
+    $"Első edzés rögzítve: {firstSession.WorkoutPlanName}");
+
+Console.WriteLine(
+    $"Második edzés rögzítve: {secondSession.WorkoutPlanName}");
+
+// Előzmények
+Console.WriteLine();
+Console.WriteLine("=== Edzéstörténet ===");
+
+foreach (WorkoutSession session in
+    workoutService.GetWorkoutHistory())
+{
+    Console.WriteLine(
+        $"{session.WorkoutPlanName} - " +
+        $"{session.CompletedAt:yyyy-MM-dd HH:mm:ss}");
+}
+
+Console.WriteLine();
+Console.WriteLine(
+    $"Teljesített edzések száma: " +
+    $"{workoutService.GetWorkoutHistory().Count}");
+
+Console.WriteLine(
+    $"Különböző teljesítésazonosítók: " +
+    $"{firstSession.Id != secondSession.Id}");

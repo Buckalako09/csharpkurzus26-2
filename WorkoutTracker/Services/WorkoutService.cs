@@ -98,30 +98,81 @@ public class WorkoutService : IWorkoutService
         workoutPlan.ExerciseIds.Add(exerciseId);
     }
 
-    // A következő fejlesztési adagban készülnek el.
-
     public List<WorkoutPlan> GetAllWorkoutPlans()
     {
-        throw new NotImplementedException();
+        return _workoutPlans
+            .OrderBy(plan => plan.Name)
+            .ToList();
     }
-
     public WorkoutPlan? GetWorkoutPlanById(Guid workoutPlanId)
     {
-        throw new NotImplementedException();
+        return _workoutPlans
+            .FirstOrDefault(plan =>
+                plan.Id == workoutPlanId);
     }
 
-    public List<Exercise> GetExercisesForWorkoutPlan(Guid workoutPlanId)
+    public List<Exercise> GetExercisesForWorkoutPlan(
+        Guid workoutPlanId)
     {
-        throw new NotImplementedException();
+        WorkoutPlan? workoutPlan =
+            GetWorkoutPlanById(workoutPlanId);
+
+        if (workoutPlan is null)
+        {
+            throw new InvalidOperationException(
+                "A megadott edzésterv nem létezik.");
+        }
+
+        return workoutPlan.ExerciseIds
+            .Select(exerciseId =>
+                _exercises.FirstOrDefault(
+                    exercise => exercise.Id == exerciseId))
+            .OfType<Exercise>()
+            .ToList();
     }
 
     public WorkoutSession CompleteWorkout(Guid workoutPlanId)
     {
-        throw new NotImplementedException();
+        WorkoutPlan? workoutPlan =
+            GetWorkoutPlanById(workoutPlanId);
+
+        if (workoutPlan is null)
+        {
+            throw new InvalidOperationException(
+                "A megadott edzésterv nem létezik.");
+        }
+
+        List<Exercise> exercises =
+            GetExercisesForWorkoutPlan(workoutPlanId);
+
+        if (exercises.Count == 0)
+        {
+            throw new InvalidOperationException(
+                "Üres edzéstervet nem lehet teljesítettnek jelölni.");
+        }
+
+        WorkoutSession workoutSession = new()
+        {
+            Id = Guid.NewGuid(),
+            WorkoutPlanId = workoutPlan.Id,
+            WorkoutPlanName = workoutPlan.Name,
+            CompletedAt = DateTime.Now,
+
+            ExerciseNames = exercises
+                .Select(exercise => exercise.Name)
+                .ToList()
+        };
+
+        _workoutSessions.Add(workoutSession);
+
+        return workoutSession;
     }
 
     public List<WorkoutSession> GetWorkoutHistory()
     {
-        throw new NotImplementedException();
+        return _workoutSessions
+            .OrderByDescending(
+                session => session.CompletedAt)
+            .ToList();
     }
 }
