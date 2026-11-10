@@ -203,3 +203,24 @@ Console.WriteLine(
 Console.WriteLine(
     $"Különböző teljesítésazonosítók: " +
     $"{firstSession.Id != secondSession.Id}");
+
+
+
+Console.WriteLine();
+Console.WriteLine("=== Statisztikák ===");
+
+StatisticsService statisticsService =
+    new StatisticsService(workoutSessions);
+
+int completedCount =
+    statisticsService.GetCompletedWorkoutCount();
+
+string? mostFrequentExercise =
+    statisticsService.GetMostFrequentExercise();
+
+Console.WriteLine(
+    $"Teljesített edzések száma: {completedCount}");
+
+Console.WriteLine(
+    $"Leggyakrabban végzett gyakorlat: " +
+    $"{mostFrequentExercise ?? "Nincs adat"}");

@@ -104,6 +104,7 @@ public class WorkoutService : IWorkoutService
             .OrderBy(plan => plan.Name)
             .ToList();
     }
+
     public WorkoutPlan? GetWorkoutPlanById(Guid workoutPlanId)
     {
         return _workoutPlans
