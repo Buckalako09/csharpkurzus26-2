@@ -1,4 +1,5 @@
-﻿using WorkoutTracker.Interfaces;
+﻿
+using WorkoutTracker.Interfaces;
 using WorkoutTracker.Models;
 
 namespace WorkoutTracker.Services;
@@ -83,26 +84,56 @@ public class ExerciseService : IExerciseService
         return true;
     }
 
+    public List<Exercise> GetAllExercises()
+    {
+        return _exercises
+            .OrderBy(exercise => exercise.Name)
+            .ToList();
+    }
+
     public Exercise? GetExerciseById(Guid exerciseId)
     {
         return _exercises.FirstOrDefault(
             exercise => exercise.Id == exerciseId);
     }
 
-    // A következő fejlesztési napon készülnek el.
-
-    public List<Exercise> GetAllExercises()
-    {
-        throw new NotImplementedException();
-    }
-
     public List<Exercise> SearchExercises(string searchTerm)
     {
-        throw new NotImplementedException();
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            return GetAllExercises();
+        }
+
+        string normalizedTerm = searchTerm.Trim();
+
+        return _exercises
+            .Where(exercise =>
+                exercise.Name.Contains(
+                    normalizedTerm,
+                    StringComparison.OrdinalIgnoreCase)
+                ||
+                exercise.MuscleGroup.Contains(
+                    normalizedTerm,
+                    StringComparison.OrdinalIgnoreCase))
+            .OrderBy(exercise => exercise.Name)
+            .ToList();
     }
 
     public List<Exercise> FilterByMuscleGroup(string muscleGroup)
     {
-        throw new NotImplementedException();
+        if (string.IsNullOrWhiteSpace(muscleGroup))
+        {
+            return new List<Exercise>();
+        }
+
+        string normalizedMuscleGroup = muscleGroup.Trim();
+
+        return _exercises
+            .Where(exercise =>
+                exercise.MuscleGroup.Equals(
+                    normalizedMuscleGroup,
+                    StringComparison.OrdinalIgnoreCase))
+            .OrderBy(exercise => exercise.Name)
+            .ToList();
     }
 }
