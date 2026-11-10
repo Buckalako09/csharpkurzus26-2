@@ -81,3 +81,52 @@ foreach (Exercise exercise in exerciseService.FilterByMuscleGroup("LÁB"))
 {
     Console.WriteLine(exercise.Name);
 }
+
+
+Console.WriteLine();
+Console.WriteLine("=== Edzésterv létrehozása ===");
+
+List<WorkoutSession> workoutSessions = new();
+
+IWorkoutService workoutService = new WorkoutService(
+    exercises,
+    workoutPlans,
+    workoutSessions);
+
+WorkoutPlan legDay = workoutService.CreateWorkoutPlan("Láb nap");
+
+Console.WriteLine($"Létrehozva: {legDay.Name}");
+
+Console.WriteLine();
+Console.WriteLine("=== Gyakorlat hozzárendelése ===");
+
+workoutService.AddExerciseToWorkoutPlan(
+    legDay.Id,
+    squat.Id);
+
+Console.WriteLine(
+    $"Edzéstervben lévő gyakorlatok: {legDay.ExerciseIds.Count}");
+
+Console.WriteLine();
+Console.WriteLine("=== Nem létező gyakorlat ellenőrzése ===");
+
+try
+{
+    workoutService.AddExerciseToWorkoutPlan(
+        legDay.Id,
+        Guid.NewGuid());
+}
+catch (InvalidOperationException ex)
+{
+    Console.WriteLine($"Helyesen elutasítva: {ex.Message}");
+}
+
+Console.WriteLine();
+Console.WriteLine("=== Edzésterv törlése ===");
+
+bool planDeleted = workoutService.DeleteWorkoutPlan(legDay.Id);
+
+Console.WriteLine($"Törlés sikeres: {planDeleted}");
+
+Console.WriteLine(
+    $"Megmaradt edzéstervek száma: {workoutPlans.Count}");
