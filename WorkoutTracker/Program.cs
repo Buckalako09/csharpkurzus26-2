@@ -1,7 +1,36 @@
-﻿
-using WorkoutTracker.Interfaces;
+﻿using WorkoutTracker.Interfaces;
 using WorkoutTracker.Models;
 using WorkoutTracker.Services;
+using WorkoutTracker.Repositories;
+
+string dataFilePath = Path.Combine(
+    AppContext.BaseDirectory,
+    "Data",
+    "workouts.json");
+
+IDataRepository dataRepository =
+    new JsonDataRepository(dataFilePath);
+
+Console.WriteLine("=== Korábban mentett adatok ===");
+
+try
+{
+    var previousData = dataRepository.Load();
+
+    Console.WriteLine(
+        $"Mentett gyakorlatok: {previousData.Exercises.Count}");
+
+    Console.WriteLine(
+        $"Mentett edzéstervek: {previousData.WorkoutPlans.Count}");
+
+    Console.WriteLine(
+        $"Mentett teljesítések: {previousData.WorkoutSessions.Count}");
+}
+catch (Exception ex)
+{
+    Console.WriteLine(
+        $"Betöltési hiba: {ex.Message}");
+}
 
 List<Exercise> exercises = new();
 List<WorkoutPlan> workoutPlans = new();
@@ -224,3 +253,40 @@ Console.WriteLine(
 Console.WriteLine(
     $"Leggyakrabban végzett gyakorlat: " +
     $"{mostFrequentExercise ?? "Nincs adat"}");
+
+
+
+Console.WriteLine();
+Console.WriteLine("=== JSON mentés és betöltés ===");
+
+try
+{
+    dataRepository.Save(
+        exercises,
+        workoutPlans,
+        workoutSessions);
+
+    Console.WriteLine("Adatok sikeresen elmentve!");
+
+    var loadedData = dataRepository.Load();
+
+    Console.WriteLine(
+        $"Betöltött gyakorlatok: {loadedData.Exercises.Count}");
+
+    Console.WriteLine(
+        $"Betöltött edzéstervek: {loadedData.WorkoutPlans.Count}");
+
+    Console.WriteLine(
+        $"Betöltött teljesítések: {loadedData.WorkoutSessions.Count}");
+
+    foreach (Exercise exercise in loadedData.Exercises)
+    {
+        Console.WriteLine(
+            $"- {exercise.Name} ({exercise.MuscleGroup})");
+    }
+}
+catch (Exception ex)
+{
+    Console.WriteLine(
+        $"JSON műveleti hiba: {ex.Message}");
+}
