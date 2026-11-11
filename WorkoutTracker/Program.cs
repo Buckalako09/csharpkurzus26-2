@@ -2,6 +2,7 @@
 using WorkoutTracker.Models;
 using WorkoutTracker.Services;
 using WorkoutTracker.Repositories;
+using WorkoutTracker.UI;
 
 string dataFilePath = Path.Combine(
     AppContext.BaseDirectory,
@@ -290,3 +291,35 @@ catch (Exception ex)
     Console.WriteLine(
         $"JSON műveleti hiba: {ex.Message}");
 }
+
+
+Console.WriteLine();
+Console.WriteLine("=== InputHelper teszt ===");
+
+string exerciseName =
+    InputHelper.ReadRequiredString(
+        "Gyakorlat neve: ");
+
+int sets =
+    InputHelper.ReadPositiveInt(
+        "Sorozatok száma: ");
+
+int menuChoice =
+    InputHelper.ReadIntInRange(
+        "Menüpont (0-12): ",
+        0,
+        12);
+
+Console.WriteLine();
+Console.WriteLine("=== Megadott adatok ===");
+
+Console.WriteLine(
+    $"Gyakorlat: {exerciseName}");
+
+Console.WriteLine(
+    $"Sorozatok: {sets}");
+
+Console.WriteLine(
+    $"Kiválasztott menüpont: {menuChoice}");
+
+InputHelper.WaitForEnter();
