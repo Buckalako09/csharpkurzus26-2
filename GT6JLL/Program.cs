@@ -1,4 +1,5 @@
-﻿using WorkoutTracker.Interfaces;
+﻿
+using WorkoutTracker.Interfaces;
 using WorkoutTracker.Models;
 using WorkoutTracker.Repositories;
 using WorkoutTracker.Services;
