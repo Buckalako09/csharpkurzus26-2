@@ -1,5 +1,4 @@
-﻿
-using WorkoutTracker.Interfaces;
+﻿using WorkoutTracker.Interfaces;
 using WorkoutTracker.Models;
 using WorkoutTracker.Services;
 
@@ -93,6 +92,7 @@ public class ConsoleMenu
                         return;
                 }
             }
+            // Hiba esetén kiírjuk az üzenetet, majd visszatérünk a menübe.
             catch (Exception ex)
             {
                 Console.WriteLine($"Hiba: {ex.Message}");

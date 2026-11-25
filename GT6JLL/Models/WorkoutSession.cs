@@ -10,5 +10,6 @@ public class WorkoutSession
 
     public DateTime CompletedAt { get; set; }
 
+    // A gyakorlatnevek másolatként megmaradnak az előzményben.
     public List<string> ExerciseNames { get; set; } = new();
 }

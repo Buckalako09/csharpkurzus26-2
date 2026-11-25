@@ -27,6 +27,7 @@ public class StatisticsService
                 exerciseName => exerciseName,
                 StringComparer.OrdinalIgnoreCase)
             .OrderByDescending(group => group.Count())
+            // Holtverseny esetén a név szerinti sorrend dönt.
             .ThenBy(group => group.Key)
             .Select(group => group.Key)
             .FirstOrDefault();

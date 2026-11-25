@@ -27,6 +27,7 @@ public class JsonDataRepository : IDataRepository
         List<WorkoutSession> WorkoutSessions
     ) Load()
     {
+        // Hiányzó adatfájl esetén üres listákkal indulunk.
         if (!File.Exists(_filePath))
         {
             return (
@@ -78,6 +79,7 @@ public class JsonDataRepository : IDataRepository
             Directory.CreateDirectory(directoryPath);
         }
 
+        // A három listát egy közös JSON objektumba mentjük.
         object data = new
         {
             Exercises = exercises,
@@ -96,6 +98,7 @@ public class JsonDataRepository : IDataRepository
         JsonElement root,
         string propertyName)
     {
+        // Hiányzó JSON mezőből üres listát készítünk.
         if (!root.TryGetProperty(
                 propertyName,
                 out JsonElement property))

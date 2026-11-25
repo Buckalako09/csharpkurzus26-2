@@ -1,5 +1,4 @@
-﻿
-using WorkoutTracker.Interfaces;
+﻿using WorkoutTracker.Interfaces;
 using WorkoutTracker.Models;
 using WorkoutTracker.Repositories;
 using WorkoutTracker.Services;
@@ -30,6 +29,7 @@ catch (Exception ex)
     return;
 }
 
+// A szolgáltatások ugyanazokat a betöltött listákat használják.
 IExerciseService exerciseService =
     new ExerciseService(exercises, workoutPlans);
 

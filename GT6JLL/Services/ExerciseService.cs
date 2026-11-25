@@ -1,5 +1,4 @@
-﻿
-using WorkoutTracker.Interfaces;
+﻿using WorkoutTracker.Interfaces;
 using WorkoutTracker.Models;
 
 namespace WorkoutTracker.Services;
@@ -41,6 +40,7 @@ public class ExerciseService : IExerciseService
                 "A sorozat- és ismétlésszámnak pozitívnak kell lennie.");
         }
 
+        // A névellenőrzés nem különbözteti meg a kis- és nagybetűket.
         bool alreadyExists = _exercises.Any(exercise =>
             exercise.Name.Equals(
                 name.Trim(),
@@ -75,6 +75,7 @@ public class ExerciseService : IExerciseService
 
         _exercises.Remove(exercise);
 
+        // Törléskor az edzéstervekből is kivesszük a gyakorlatot.
         foreach (WorkoutPlan workoutPlan in _workoutPlans)
         {
             workoutPlan.ExerciseIds

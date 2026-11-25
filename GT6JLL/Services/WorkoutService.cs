@@ -124,6 +124,7 @@ public class WorkoutService : IWorkoutService
                 "A megadott edzésterv nem létezik.");
         }
 
+        // Az azonosítók alapján keressük meg a gyakorlatokat.
         return workoutPlan.ExerciseIds
             .Select(exerciseId =>
                 _exercises.FirstOrDefault(
@@ -152,6 +153,7 @@ public class WorkoutService : IWorkoutService
                 "Üres edzéstervet nem lehet teljesítettnek jelölni.");
         }
 
+        // A teljesítés adatairól külön előzmény készül.
         WorkoutSession workoutSession = new()
         {
             Id = Guid.NewGuid(),
